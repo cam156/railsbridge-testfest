@@ -5,7 +5,6 @@ class PostsController < ApplicationController
 
   def index
     @posts = Post.all
-    render :new
   end
 
   def new
@@ -28,19 +27,20 @@ class PostsController < ApplicationController
           api_secret: Rails.application.secrets.cloudinary_api_secret
         }
 
-        #cl_resp = Cloudinary::Uploader.upload(params[:post][:image], auth)
+        cl_resp = Cloudinary::Uploader.upload(params[:post][:image], auth)
+      else
+
+        # Construct the API URL here, taking care to use Rails.application.secrets.bitly_api_key and
+        # Rails.application.secrets.bitly_username, for the login, and Rails route helpers the post's url
+        bitly_url = "https://api.ssl.bitly.com/v3/shorten/blahblah/"
+
+        # Once the URL is constructed, you can use the simple GET call below, via the Net::HTTP library, to pass the test.
+        # Note that in general, when using Net::HTTP, you have to think about handling all of its possible exceptions. An
+        # easier option might be to investigate the use of a Bitly gem, for example, https://github.com/philnash/bitly
+        # which abstracts out errors for you in a more readable way.
+
+        resp = JSON.parse(Net::HTTP.get URI(bitly_url))
       end
-
-      # Construct the API URL here, taking care to use Rails.application.secrets.bitly_api_key and
-      # Rails.application.secrets.bitly_username, for the login, and Rails route helpers the post's url
-      bitly_url = "http://api.bitly.com/..."
-
-      # Once the URL is constructed, you can use the simple GET call below, via the Net::HTTP library, to pass the test.
-      # Note that in general, when using Net::HTTP, you have to think about handling all of its possible exceptions. An
-      # easier option might be to investigate the use of a Bitly gem, for example, https://github.com/philnash/bitly
-      # which abstracts out errors for you in a more readable way.
-
-      # resp = JSON.parse(Net::HTTP.get URI(bitly_url))
 
       redirect_to posts_url
     else
@@ -64,12 +64,12 @@ class PostsController < ApplicationController
 
   def show
     @post = Post.find(params[:id])
-    render :index
   end
 
   def destroy
     @post = Post.find(params[:id])
-    redirect_to new_posts_url
+    @post.destroy
+    redirect_to posts_url
   end
 
   private
