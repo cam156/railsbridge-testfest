@@ -1,14 +1,14 @@
 require 'rails_helper'
 
 RSpec.describe Post, type: :model do
+  let(:user) { User.create!(email: 'abc@def.com', password: 'password')}
 
 
 # Model test for data input
   describe 'Post to be valid' do
-
     let(:post) {Post.new(
       title: 'What is the difference between a cookie and a session?',
-      user_id: 8,
+      user: user,
       content: 'What are the diffences with these key/value pairs?',
     )}
 
@@ -50,7 +50,7 @@ RSpec.describe Post, type: :model do
   it "is valid with a title, user_id, and content" do
     post = Post.new(
       title: 'What is the difference between a cookie and a session?',
-      user_id: 8,
+      user_id: user.id,
       content: 'What are the diffences with these key/value pairs?')
     expect(post).to be_valid
   end
@@ -64,7 +64,7 @@ RSpec.describe Post, type: :model do
   it "is invalid without a user_id" do
     post = Post.new(user_id: nil)
     post.valid?
-    expect(post.errors[:user_id]).to include("can't be blank")
+    expect(post.errors[:user]).to include("can't be blank")
   end
 
   it "is invalid without a content" do

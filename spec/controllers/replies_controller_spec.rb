@@ -9,11 +9,15 @@ RSpec.describe RepliesController, type: :controller do
       post_id: 1,
       ) }
 
-    let(:post) { Post.create(
+    let(:user) { User.create!(email: 'abc@def.com', password: 'password')}
+    let(:post) do
+      post = Post.create(
       title: 'What is the difference between a cookie and a session?',
-      user_id: 10,
+      user_id: user.id,
       content: 'What are the diffences with these key/value pairs?',
-      ) }
+      )
+      post
+    end
 
     describe '#new' do
 

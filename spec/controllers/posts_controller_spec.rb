@@ -55,11 +55,11 @@ RSpec.describe PostsController, type: :controller do
     end
 
     describe '#show' do
-      let(:created_post) { [ Post.create(
+      let(:created_post) { Post.create(
         title: 'What is the difference between a cookie and a session?',
-        user_id: 10,
+        user: User.create,
         content: 'What are the diffences with these key/value pairs?',
-        ) ] }
+        ) }
 
       it "renders the show view" do
         get :show, params: {id: created_post}
@@ -76,7 +76,7 @@ RSpec.describe PostsController, type: :controller do
       before :each do
         @deleted_post = Post.create(
           title: 'What is the between a cookie and a session?',
-          user_id: 11,
+          user: User.create,
           content: 'What are the with these key/value pairs?',
           )
       end

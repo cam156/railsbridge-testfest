@@ -3,7 +3,7 @@ class CreateReplies < ActiveRecord::Migration
     create_table :replies do |t|
       t.string :body
       t.string :post_id
-      t.string :user_id
+      t.integer :user_id
 
       t.timestamps null: false
     end
